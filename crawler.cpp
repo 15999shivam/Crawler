@@ -357,8 +357,30 @@ void getPage(char *link,char *file)
         fout.close();
         }
 }
+int getFileSize(char *file1)
+{
+  struct stat st; //variable which will count length of file.
+  stat(file1,&st); 
+  return st.st_size;
+}
+char* getFile(char *fileName,int file_size)
+{
+  char *file = (char *)malloc(file_size*2);
+  ifstream fin(fileName);
+  int it=0;
+  char ch;
+  while(!fin.eof())
+  {
+  ch = fin.get();
+  file[it]=ch;
+  it++;
+  }
+  return file;
+}
+//function
 int main(int argc,char *argv[])
 {
+  
     if(argc<4)
     {
     printf("Please give link depth filename.txt\nerr:too few arguments\n");
@@ -392,27 +414,19 @@ int main(int argc,char *argv[])
         
     }
    // int file_no = 1;
-   struct stat st; //variable which will count length of file.
+   
    char file1[30] = "/home/shivam/Desktop/crawler/";
    strcat(file1,argv[3]);
    //cout<<file1;
-   
-stat(file1,&st); // temp.txt is the file where wget fetch the html
-int file_size=st.st_size;
+  
+int file_size=getFileSize(file1);
 cout<<file_size<<endl;
 
-char *file = (char *)malloc(file_size*2);
+char *file = getFile(argv[3],file_size);
 //cout<<file_size;
-char *ptr;
-ifstream fin(argv[3]);
-int it=0;
-char ch;
-while(!fin.eof())
-{
- ch = fin.get();
- file[it]=ch;
- it++;
-}
+//function 
+
+
 //cout<<file;
 
 char *urls = (char*)malloc(100*sizeof(char));
@@ -524,7 +538,7 @@ for( i=0;i<100;i++)
  
   while(temp12!=NULL)
   {
-    cout<<"hii";
+    
     cout<<temp12->link<<endl;
     temp12 = temp12->next;
   }
